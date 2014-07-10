@@ -1,0 +1,3 @@
+name: BurnBlader-t2
+main: com.tenjava.entries.BurnBlader.t2.TenJava
+version: '${project.version}'
