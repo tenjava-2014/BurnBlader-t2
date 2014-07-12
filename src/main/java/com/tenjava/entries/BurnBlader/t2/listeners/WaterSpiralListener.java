@@ -63,9 +63,9 @@ public class WaterSpiralListener implements Listener {
 	}
 	
 	@EventHandler
-	public void onMove(PlayerMoveEvent event) {
+	public void onMove(final PlayerMoveEvent event) {
 		if(launched.contains(event.getPlayer().getName())) {
-			if(event.getPlayer().getLocation().getBlockY() < (yCoord.get(event.getPlayer().getName()) + 10)) {
+			if(event.getPlayer().getLocation().getBlockY() < (yCoord.get(event.getPlayer().getName()) + 40)) {
 				if(waterBlocks.containsKey(event.getPlayer().getName())) {
 					HashMap<Block, Material> blocks = waterBlocks.get(event.getPlayer().getName());
 					blocks.put(event.getPlayer().getLocation().getBlock(), event.getPlayer().getLocation().getBlock().getType());
@@ -76,17 +76,24 @@ public class WaterSpiralListener implements Listener {
 					blocks.put(event.getPlayer().getLocation().getBlock(), event.getPlayer().getLocation().getBlock().getType());
 					waterBlocks.put(event.getPlayer().getName(), blocks);
 				}
-				event.getPlayer().getLocation().getBlock().setType(Material.STATIONARY_WATER);
+				event.getPlayer().getLocation().getBlock().setType(Material.WATER);
 			} else {
 				launched.remove(event.getPlayer().getName());
-				Iterator<Entry<Block, Material>> i = waterBlocks.get(event.getPlayer().getName()).entrySet().iterator();
-				while(i.hasNext()) {
-			        Map.Entry<Block, Material> blocks = (Map.Entry<Block, Material>) i.next();
-			        blocks.getKey().setType(blocks.getValue());
-			        i.remove();
-			    }
-				waterBlocks.remove(event.getPlayer());
 				yCoord.remove(event.getPlayer());
+				Bukkit.getScheduler().runTaskLater(TenJava.get(), new Runnable() {
+
+					@Override
+					public void run() {
+						Iterator<Entry<Block, Material>> i = waterBlocks.get(event.getPlayer().getName()).entrySet().iterator();
+						while(i.hasNext()) {
+					        Map.Entry<Block, Material> blocks = (Map.Entry<Block, Material>) i.next();
+					        blocks.getKey().setType(blocks.getValue());
+					        i.remove();
+					    }
+						waterBlocks.remove(event.getPlayer());
+					}
+					
+				}, 40L);
 			}
 		}
 	}
