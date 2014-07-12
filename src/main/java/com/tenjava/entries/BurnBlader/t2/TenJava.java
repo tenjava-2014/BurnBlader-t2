@@ -13,7 +13,9 @@ import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.tenjava.entries.BurnBlader.t2.listeners.BlockListener;
 import com.tenjava.entries.BurnBlader.t2.listeners.EntityListener;
+import com.tenjava.entries.BurnBlader.t2.listeners.PlayerListener;
 import com.tenjava.entries.BurnBlader.t2.listeners.WaterSpiralListener;
 import com.tenjava.entries.BurnBlader.t2.utils.ItemUtils;
 import com.tenjava.entries.BurnBlader.t2.utils.Log;
@@ -56,6 +58,8 @@ public class TenJava extends JavaPlugin {
 	void registerListeners(PluginManager pm) {
 		pm.registerEvents(new WaterSpiralListener(), this);
 		pm.registerEvents(new EntityListener(), this);
+		pm.registerEvents(new PlayerListener(), this);
+		pm.registerEvents(new BlockListener(), this);
 	}
 	
 	void registerCommands() {
