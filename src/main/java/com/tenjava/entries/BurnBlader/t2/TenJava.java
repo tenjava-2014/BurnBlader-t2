@@ -15,6 +15,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.tenjava.entries.BurnBlader.t2.listeners.BlockListener;
 import com.tenjava.entries.BurnBlader.t2.listeners.EntityListener;
+import com.tenjava.entries.BurnBlader.t2.listeners.ExplosionBlockListener;
 import com.tenjava.entries.BurnBlader.t2.listeners.PlayerListener;
 import com.tenjava.entries.BurnBlader.t2.listeners.WaterSpiralListener;
 import com.tenjava.entries.BurnBlader.t2.utils.ItemUtils;
@@ -60,6 +61,7 @@ public class TenJava extends JavaPlugin {
 		pm.registerEvents(new EntityListener(), this);
 		pm.registerEvents(new PlayerListener(), this);
 		pm.registerEvents(new BlockListener(), this);
+		pm.registerEvents(new ExplosionBlockListener(), this);
 	}
 	
 	void registerCommands() {

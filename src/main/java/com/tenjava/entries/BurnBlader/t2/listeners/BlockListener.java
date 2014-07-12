@@ -10,6 +10,8 @@ import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -83,6 +85,12 @@ public class BlockListener implements Listener {
 				Block b4 = b.getRelative(BlockFace.SOUTH);
 				b4.getRelative(BlockFace.DOWN).setType(b4.getType());
 				b4.setType(Material.AIR);
+				for(Entity e : player.getNearbyEntities(5, 2, 5)) {
+					if(e instanceof LivingEntity) {
+						((LivingEntity) e).damage(10.0);
+						e.setVelocity(new Vector(0, 2, 0));
+					}
+				}
 			}
 		}
 	}
@@ -142,6 +150,23 @@ public class BlockListener implements Listener {
 					
 				}, 100L);
 				Energy.remove(player, 50);
+			} else {
+				Chat.sendMessage(player, Chat.NOT_ENOUGH_ENERGY.replace("$", "10"));
+			}
+		} else if(b == Material.GLASS) {
+			if(Energy.get(player) >= 10) {
+				player.setVelocity(new Vector(0, 4, 0));
+				Bukkit.getScheduler().runTaskLater(TenJava.get(), new Runnable() {
+
+					@Override
+					public void run() {
+						player.getLocation().getBlock().getRelative(BlockFace.DOWN).setType(Material.GLASS);
+						player.setVelocity(new Vector(0, 0, 0));
+						player.setFallDistance(0F);
+					}
+					
+				}, 20L);
+				Energy.remove(player, 10);
 			} else {
 				Chat.sendMessage(player, Chat.NOT_ENOUGH_ENERGY.replace("$", "10"));
 			}
