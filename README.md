@@ -35,7 +35,9 @@ This plugin uses energy from Minecraft's many elements. With this energy you can
 - Glass: Launches you into the air and you land on a glass platform - Cost: 10 Energy
 - Grass: Creates a small explosion where you're standing - Cost: 5 Energy
 - Stone: Launches you into the air, and when you land you damage entities around you - Cost: 50 Energy
-- Water: (to be decided)
+- Water: You move quickly in the direction you look - Cost: 20 Energy
+- Netherrack: You create a trail of fire behind you - Cost: 20 Energy
+- Air: You fly for a few seconds - Cost: 20 Energy
 - Wool: Teleports you to your bed location - Cost: 10 Energy
 
 How to receive Energy

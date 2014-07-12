@@ -18,11 +18,14 @@ import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.util.Vector;
 
 import com.tenjava.entries.BurnBlader.t2.TenJava;
+import com.tenjava.entries.BurnBlader.t2.effects.AirEffect;
 import com.tenjava.entries.BurnBlader.t2.effects.DiamondOreEffect;
 import com.tenjava.entries.BurnBlader.t2.effects.DirtEffect;
 import com.tenjava.entries.BurnBlader.t2.effects.GlassEffect;
 import com.tenjava.entries.BurnBlader.t2.effects.GrassEffect;
+import com.tenjava.entries.BurnBlader.t2.effects.NetherrackEffect;
 import com.tenjava.entries.BurnBlader.t2.effects.StoneEffect;
+import com.tenjava.entries.BurnBlader.t2.effects.WaterEffect;
 import com.tenjava.entries.BurnBlader.t2.effects.WoolEffect;
 import com.tenjava.entries.BurnBlader.t2.utils.Chat;
 
@@ -53,6 +56,7 @@ public class BlockListener implements Listener {
 								block(event.getPlayer(), b.getType());
 								Bukkit.getScheduler().cancelTask(sneakingTasks.get(event.getPlayer().getName()));
 								sneakingTasks.remove(event.getPlayer().getName());
+								percentage = 0;
 							}
 						} else {
 							Bukkit.getScheduler().cancelTask(sneakingTasks.get(event.getPlayer().getName()));
@@ -109,6 +113,12 @@ public class BlockListener implements Listener {
 			new StoneEffect(50).doEffect(player);
 		} else if(b == Material.GLASS) {
 			new GlassEffect(10).doEffect(player);
+		} else if(b == Material.AIR) {
+			new AirEffect(20).doEffect(player);
+		} else if(b == Material.NETHERRACK) {
+			new NetherrackEffect(20).doEffect(player);
+		} else if(b == Material.WATER) {
+			new WaterEffect(20).doEffect(player);
 		} else {
 			Chat.sendMessage(player, ChatColor.RED + "This block does nothing...");
 		}
