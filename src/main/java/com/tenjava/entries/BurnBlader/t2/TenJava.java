@@ -4,13 +4,18 @@ import java.io.File;
 import java.io.IOException;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.tenjava.entries.BurnBlader.t2.listeners.EntityListener;
 import com.tenjava.entries.BurnBlader.t2.listeners.WaterSpiralListener;
+import com.tenjava.entries.BurnBlader.t2.utils.ItemUtils;
 import com.tenjava.entries.BurnBlader.t2.utils.Log;
 
 public class TenJava extends JavaPlugin {
@@ -26,6 +31,7 @@ public class TenJava extends JavaPlugin {
 		registerListeners(getServer().getPluginManager());
 		registerCommands();
 		setupEnergyFile();
+		setupSapperRecipe();
 		for(Player p : Bukkit.getOnlinePlayers()) {
 			if(energyConfig.contains("Energy." + p.getUniqueId().toString())) {
 				p.setLevel(energyConfig.getInt("Energy." + p.getUniqueId().toString()));
@@ -78,6 +84,14 @@ public class TenJava extends JavaPlugin {
 			}
 		}
 		energyConfig = YamlConfiguration.loadConfiguration(energyFile);
+	}
+	
+	void setupSapperRecipe() {
+		ShapedRecipe g = new ShapedRecipe(ItemUtils.rename(new ItemStack(Material.WOOD_HOE), ChatColor.DARK_PURPLE + "Energy Sapper")).
+				shape("$$$", "$%$", "$%$").
+				setIngredient('$', Material.DIAMOND).
+				setIngredient('%', Material.STICK);
+		getServer().addRecipe(g);
 	}
 	
 }
