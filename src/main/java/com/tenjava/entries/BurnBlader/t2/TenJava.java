@@ -17,7 +17,8 @@ public class TenJava extends JavaPlugin {
 	
 	private static TenJava main;
 	
-	private YamlConfiguration energyFile;
+	private YamlConfiguration energyConfig;
+	private File energyFile;
 	
 	public void onEnable() {
 		main = this;
@@ -26,8 +27,8 @@ public class TenJava extends JavaPlugin {
 		registerCommands();
 		setupEnergyFile();
 		for(Player p : Bukkit.getOnlinePlayers()) {
-			if(energyFile.contains("Energy." + p.getUniqueId().toString())) {
-				p.setLevel(energyFile.getInt("Energy." + p.getUniqueId().toString()));
+			if(energyConfig.contains("Energy." + p.getUniqueId().toString())) {
+				p.setLevel(energyConfig.getInt("Energy." + p.getUniqueId().toString()));
 			} else {
 				p.setLevel(0);
 			}
@@ -36,6 +37,14 @@ public class TenJava extends JavaPlugin {
 	
 	public void onDisable() {
 		Log.info("BurnBlader TenJava Entry", "Closing down...");
+		for(Player player : Bukkit.getOnlinePlayers()) {
+			TenJava.get().getEnergyFile().set("Energy." + player.getUniqueId().toString(), player.getLevel());
+		}
+		try {
+			energyConfig.save(energyFile);
+		} catch (IOException e) {
+			Log.error(e);
+		}
 	}
 	
 	void registerListeners(PluginManager pm) {
@@ -52,19 +61,23 @@ public class TenJava extends JavaPlugin {
 	}
 	
 	public YamlConfiguration getEnergyFile() {
-		return energyFile;
+		return energyConfig;
 	}
 	
 	void setupEnergyFile() {
-		File f = new File("plugins/BurnBladerTenJava/energy.yml");
-		if(!f.exists()) {
+		energyFile = new File(getDataFolder() + "/energy.yml");
+		if(!energyFile.exists()) {
 			try {
-				f.createNewFile();
+				if(!getDataFolder().exists()) {
+					getDataFolder().mkdir();
+				}
+				energyFile.createNewFile();
 			} catch (IOException e) {
 				Log.error(e);
+				Log.info("error", energyFile.getAbsolutePath());
 			}
 		}
-		energyFile = YamlConfiguration.loadConfiguration(f);
+		energyConfig = YamlConfiguration.loadConfiguration(energyFile);
 	}
 	
 }
