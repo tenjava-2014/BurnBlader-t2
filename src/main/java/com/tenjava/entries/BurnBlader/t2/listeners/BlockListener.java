@@ -5,9 +5,7 @@ import java.util.HashMap;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
@@ -17,19 +15,22 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
 import com.tenjava.entries.BurnBlader.t2.TenJava;
-import com.tenjava.entries.BurnBlader.t2.energy.Energy;
+import com.tenjava.entries.BurnBlader.t2.effects.DiamondOreEffect;
+import com.tenjava.entries.BurnBlader.t2.effects.DirtEffect;
+import com.tenjava.entries.BurnBlader.t2.effects.GlassEffect;
+import com.tenjava.entries.BurnBlader.t2.effects.GrassEffect;
+import com.tenjava.entries.BurnBlader.t2.effects.StoneEffect;
+import com.tenjava.entries.BurnBlader.t2.effects.WoolEffect;
 import com.tenjava.entries.BurnBlader.t2.utils.Chat;
 
 public class BlockListener implements Listener {
 	
 	private HashMap<String, Integer> sneakingTasks = new HashMap<String, Integer>();
 	
-	private ArrayList<String> fallStomp = new ArrayList<String>();
+	public static ArrayList<String> fallStomp = new ArrayList<String>();
 	
 	@EventHandler
 	public void onSneak(final PlayerToggleSneakEvent event) {
@@ -97,79 +98,17 @@ public class BlockListener implements Listener {
 	
 	public void block(final Player player, Material b) {
 		if(b == Material.DIAMOND_ORE) {
-			if(Energy.get(player) >= 30) {
-				player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 20 * 30, 5));
-				Energy.remove(player, 30);
-			} else {
-				Chat.sendMessage(player, Chat.NOT_ENOUGH_ENERGY.replace("$", "30"));
-			}
+			new DiamondOreEffect(20).doEffect(player);
 		} else if(b == Material.GRASS) {
-			if(Energy.get(player) >= 5) {
-				for(BlockFace bl : BlockFace.values()) {
-					player.getLocation().getBlock().getRelative(bl).setType(Material.AIR);
-				}
-				player.getWorld().playSound(player.getLocation(), Sound.EXPLODE, 1, 1);
-				Energy.remove(player, 5);
-			} else {
-				Chat.sendMessage(player, Chat.NOT_ENOUGH_ENERGY.replace("$", "5"));
-			}
+			new GrassEffect(5).doEffect(player);
 		} else if(b == Material.DIRT) {
-			if(Energy.get(player) >= 40) {
-				player.teleport(new Location(player.getLocation().getWorld(), player.getLocation().getX(), 16, player.getLocation().getZ()));
-				player.getLocation().getBlock().setType(Material.AIR);
-				player.getLocation().getBlock().getRelative(BlockFace.UP).setType(Material.AIR);
-				Energy.remove(player, 40);
-			} else {
-				Chat.sendMessage(player, Chat.NOT_ENOUGH_ENERGY.replace("$", "40"));
-			}
+			new DirtEffect(40).doEffect(player);
 		} else if(b == Material.WOOL) {
-			if(Energy.get(player) >= 10) {
-				player.teleport(player.getBedSpawnLocation());
-				Energy.remove(player, 10);
-			} else {
-				Chat.sendMessage(player, Chat.NOT_ENOUGH_ENERGY.replace("$", "10"));
-			}
+			new WoolEffect(10).doEffect(player);
 		} else if(b == Material.STONE) {
-			if(Energy.get(player) >= 50) {
-				player.setVelocity(new Vector(0, 4, 0));
-				fallStomp.add(player.getName());
-				Bukkit.getScheduler().runTaskLater(TenJava.get(), new Runnable() {
-
-					@Override
-					public void run() {
-						player.setVelocity(new Vector(0, -5, 0));
-					}
-					
-				}, 20L);
-				Bukkit.getScheduler().runTaskLater(TenJava.get(), new Runnable() {
-
-					@Override
-					public void run() {
-						fallStomp.remove(player.getName());
-					}
-					
-				}, 100L);
-				Energy.remove(player, 50);
-			} else {
-				Chat.sendMessage(player, Chat.NOT_ENOUGH_ENERGY.replace("$", "10"));
-			}
+			new StoneEffect(50).doEffect(player);
 		} else if(b == Material.GLASS) {
-			if(Energy.get(player) >= 10) {
-				player.setVelocity(new Vector(0, 4, 0));
-				Bukkit.getScheduler().runTaskLater(TenJava.get(), new Runnable() {
-
-					@Override
-					public void run() {
-						player.getLocation().getBlock().getRelative(BlockFace.DOWN).setType(Material.GLASS);
-						player.setVelocity(new Vector(0, 0, 0));
-						player.setFallDistance(0F);
-					}
-					
-				}, 20L);
-				Energy.remove(player, 10);
-			} else {
-				Chat.sendMessage(player, Chat.NOT_ENOUGH_ENERGY.replace("$", "10"));
-			}
+			new GlassEffect(10).doEffect(player);
 		} else {
 			Chat.sendMessage(player, ChatColor.RED + "This block does nothing...");
 		}
