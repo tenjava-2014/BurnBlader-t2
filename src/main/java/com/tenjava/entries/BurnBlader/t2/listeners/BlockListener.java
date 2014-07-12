@@ -84,6 +84,13 @@ public class BlockListener implements Listener {
 			} else {
 				Chat.sendMessage(player, Chat.NOT_ENOUGH_ENERGY.replace("$", "40"));
 			}
+		} else if(b == Material.WOOL) {
+			if(Energy.get(player) >= 40) {
+				player.teleport(player.getBedSpawnLocation());
+				Energy.remove(player, 40);
+			} else {
+				Chat.sendMessage(player, Chat.NOT_ENOUGH_ENERGY.replace("$", "40"));
+			}
 		} else {
 			Chat.sendMessage(player, ChatColor.RED + "This block does nothing...");
 		}
