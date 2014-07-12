@@ -8,7 +8,6 @@ import com.tenjava.entries.BurnBlader.t2.listeners.BlockListener;
 import com.tenjava.entries.BurnBlader.t2.listeners.EntityListener;
 import com.tenjava.entries.BurnBlader.t2.listeners.ExplosionBlockListener;
 import com.tenjava.entries.BurnBlader.t2.listeners.PlayerListener;
-import com.tenjava.entries.BurnBlader.t2.listeners.WaterSpiralListener;
 import com.tenjava.entries.BurnBlader.t2.utils.Log;
 import com.tenjava.entries.BurnBlader.t2.utils.Recepies;
 
@@ -28,7 +27,6 @@ public class TenJava extends JavaPlugin {
 	}
 	
 	void registerListeners(PluginManager pm) {
-		pm.registerEvents(new WaterSpiralListener(), this);
 		pm.registerEvents(new EntityListener(), this);
 		pm.registerEvents(new PlayerListener(), this);
 		pm.registerEvents(new BlockListener(), this);
